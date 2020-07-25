@@ -6,8 +6,10 @@ using UnityEngine.UI;
 public class Power : MonoBehaviour
 {
     public int Value;
+    private int val;
     private bool incr;
     private Text text;
+    private MeterUpdater meter;
 
     public bool Started;
     public bool Stopped;
@@ -20,28 +22,17 @@ public class Power : MonoBehaviour
         this.text = this.gameObject.GetComponent<Text>();
         this.incr = true;
         Value = 0;
+        val = 0;
         this.text.text = $"Power: {Value}";
+        this.meter = new MeterUpdater(0, 1000, 30);
     }
     
     // Update is called once per frame
     void Update()
     {
         if(this.Started && !this.Stopped){
-            if(Value >= 1000)
-            {
-                Value = 1000;
-                this.incr = false;
-            }
-            if(Value <= 0)
-            {
-                Value = 0;
-                this.incr = true;
-            }
-            if(this.incr)
-                Value++;
-            else
-                Value--;
-            this.text.text = $"Power: {Value / 10}";
+            this.Value = this.meter.Update();     
+            this.text.text = $"Power: {this.Value / 10}";
         }
     }
 

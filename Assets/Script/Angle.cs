@@ -10,6 +10,7 @@ public class Angle : MonoBehaviour
     private Text text;
     public bool Started;
     public bool Stopped;
+    MeterUpdater meter;
 
     public bool Finished => this.Started && this.Stopped;
 
@@ -20,6 +21,7 @@ public class Angle : MonoBehaviour
         this.incr = true;
         Value = 0;
         this.text.text = $"Angle: {Value}";
+        this.meter = new MeterUpdater(0, 900, 30);
     }
     
 
@@ -27,21 +29,8 @@ public class Angle : MonoBehaviour
     void Update()
     {
         if(this.Started && !this.Stopped){
-            if(Value >= 900)
-            {
-                Value = 900;
-                this.incr = false;
-            }
-            if(Value <= 0)
-            {
-                Value = 0;
-                this.incr = true;
-            }
-            if(this.incr)
-                Value++;
-            else
-                Value--;
-            this.text.text = $"Angle: {Value / 10}";
+            this.Value = this.meter.Update();
+            this.text.text = $"Angle: {this.Value / 10}";
         }
     }
 
