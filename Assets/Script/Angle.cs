@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class Angle : MonoBehaviour
 {
     public int Value;
-    private bool incr;
     private Text text;
     public bool Started;
     public bool Stopped;
@@ -18,7 +17,6 @@ public class Angle : MonoBehaviour
     void Start()
     {
         this.text = this.gameObject.GetComponent<Text>();
-        this.incr = true;
         Value = 0;
         this.text.text = $"Angle: {Value}";
         this.meter = new MeterUpdater(0, 900, 30);
@@ -51,5 +49,10 @@ public class Angle : MonoBehaviour
     {
         this.Stopped = true;
     }
+
+	public void Disable()
+	{
+        this.gameObject.SetActive(false);
+	}
 
 }

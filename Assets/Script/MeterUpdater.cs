@@ -8,13 +8,16 @@ public class MeterUpdater
 	int edge;
     int val;
     bool incr;
+    int incr_value;
 
-	public MeterUpdater(int start, int end, int edge_interval)
+	public MeterUpdater(int start, int end, int edge_interval, bool incr = true, int incr_value = 1)
 	{
 		this.start = start;
 		this.end = end;
 		this.edge = edge_interval;
         this.val = start;
+        this.incr = incr;
+        this.incr_value = incr_value;
 	}
 
 	public int Update()
@@ -30,9 +33,9 @@ public class MeterUpdater
             this.incr = true;
         }
         if (this.incr)
-            this.val++;
+            this.val += this.incr_value;
         else
-            this.val--;
+            this.val -= this.incr_value;
 
         if (this.val > this.end)
             return this.end;

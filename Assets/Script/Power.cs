@@ -6,25 +6,21 @@ using UnityEngine.UI;
 public class Power : MonoBehaviour
 {
     public int Value;
-    private int val;
-    private bool incr;
-    private Text text;
+    private Slider slider;
     private MeterUpdater meter;
 
     public bool Started;
     public bool Stopped;
+    public int IncrementValue = 1;
 
     public bool Finished => this.Started && this.Stopped;
 
     // Start is called before the first frame update
     void Start()
     {
-        this.text = this.gameObject.GetComponent<Text>();
-        this.incr = true;
+        this.slider = this.gameObject.GetComponent<Slider>();
         Value = 0;
-        val = 0;
-        this.text.text = $"Power: {Value}";
-        this.meter = new MeterUpdater(0, 1000, 30);
+        this.meter = new MeterUpdater(0, 1000, 30, true, this.IncrementValue);
     }
     
     // Update is called once per frame
@@ -32,7 +28,7 @@ public class Power : MonoBehaviour
     {
         if(this.Started && !this.Stopped){
             this.Value = this.meter.Update();     
-            this.text.text = $"Power: {this.Value / 10}";
+            this.slider.value = this.Value / 10;
         }
     }
 
@@ -52,5 +48,12 @@ public class Power : MonoBehaviour
     public void StopIndicator()
     {
         this.Stopped = true;
+        var img = this.slider.transform.Find("Fill Area/Fill").GetComponent<Image>();
+        img.color = new Color { r = 1, g = 0.6191381f, b = 0.3726415f, a = 1 };
     }
+
+    public void Disable()
+    {
+        this.gameObject.SetActive(false);
+	}
 }

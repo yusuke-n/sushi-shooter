@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     {
         
     }
+
     public void Hit(int pow, int angle)
 	{
 		double p = pow / 10;

@@ -7,14 +7,13 @@ public class SceneObserver : MonoBehaviour
 {
 	public static State State = new State();
 	public PlayerController Player { get; private set; }
-	public Camera MainCamera { get; private set; }
 	public bool Started { get; private set; }
 	public bool Hitted { get; private set; }
 	public Power Power { get; private set; }
 	public Angle Angle { get; private set; }
 	private Vector3 camerapos;
 
-	public float CameraOffsetY = 2.0f;
+	
 
 	// Start is called before the first frame update
 	void Start()
@@ -22,21 +21,23 @@ public class SceneObserver : MonoBehaviour
 		this.Player = GameObject.Find("Player").GetComponent<PlayerController>();
 		this.Power = GameObject.Find("Power").GetComponent<Power>();
 		this.Angle = GameObject.Find("Angle").GetComponent<Angle>();
-		this.MainCamera = Camera.main;
-		this.camerapos = new Vector3{ z = -10 };
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-		this.FollowCameraToPlayer();
+		
 		if(Input.GetMouseButtonUp(0))
 		{
 			if(this.Power.Finished)
 			{
 				this.Angle.Click();
-				if(this.Angle.Finished){}
+				if (this.Angle.Finished)
+				{
+					this.DisableIndicators();
 					this.Player.Hit(this.Power.Value, this.Angle.Value);
+					State.ShootStarted = true;
+				}
 			}
 			else
 			{
@@ -47,10 +48,11 @@ public class SceneObserver : MonoBehaviour
 		}
 	}
 
-	void FollowCameraToPlayer()
+	void DisableIndicators()
 	{
-		this.camerapos.x =this.Player.transform.position.x;
-		this.camerapos.y = this.Player.transform.position.y + this.CameraOffsetY;
-		this.MainCamera.transform.position = this.camerapos;
+		this.Angle.Disable();
+		this.Power.Disable();
 	}
+
+	
 }
