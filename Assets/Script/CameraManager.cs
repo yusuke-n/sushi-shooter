@@ -8,9 +8,11 @@ public class CameraManager : MonoBehaviour
 {
     public float CameraOffsetY = 2.0f;
     public GameObject Background;
+    public GameObject BackgroundLoop;
 
     private Camera main_camera;
     private PlayerController player;
+    private BackgroundLoop bloop;
     private Vector3 camerapos;
     private float x_min, x_max, y_min, y_max;
 
@@ -19,6 +21,7 @@ public class CameraManager : MonoBehaviour
     {
         this.main_camera = this.gameObject.GetComponent<Camera>();
         this.player = GameObject.Find("Player").GetComponent<PlayerController>();
+        this.bloop = this.BackgroundLoop.GetComponent<BackgroundLoop>();
         this.camerapos = new Vector3 { z = -10 };
         this.SetupBounds();
         this.FollowCameraToPlayer(this.CameraOffsetY);
@@ -29,7 +32,7 @@ public class CameraManager : MonoBehaviour
         var local_bounds = this.Background.GetComponent<Tilemap>().localBounds;
         float screen_ratio = (float)Screen.width / (float)Screen.height;
         this.x_min = local_bounds.center.x - local_bounds.extents.x + this.main_camera.orthographicSize * screen_ratio;
-        this.x_max = local_bounds.center.x + local_bounds.extents.x - this.main_camera.orthographicSize * screen_ratio;
+        //this.x_max = local_bounds.center.x + local_bounds.extents.x - this.main_camera.orthographicSize * screen_ratio;
         this.y_min = local_bounds.center.y - local_bounds.extents.y + this.main_camera.orthographicSize;
         this.y_max = local_bounds.center.y + local_bounds.extents.y - this.main_camera.orthographicSize;
     }
@@ -37,6 +40,8 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (this.bloop.IsMoveTriggered(this.player.transform.position))
+            this.bloop.MoveBackground();
         this.FollowCameraToPlayer(this.CameraOffsetY);
     }
 
@@ -51,10 +56,8 @@ public class CameraManager : MonoBehaviour
         if (nextx < this.x_min)
         {
             this.camerapos.x = this.x_min;
-        } else if (nextx > this.x_max)
-        {
-            this.camerapos.x = this.x_max;
-		} else {
+        } else
+        { 
             this.camerapos.x = nextx;
 		}
         if (nexty < this.y_min)

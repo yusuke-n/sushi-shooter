@@ -45,11 +45,27 @@ public class Power : MonoBehaviour
         this.Started = true;
     }
 
+    public void ResetAndEnable()
+    {
+        this.Started = false;
+        this.Stopped = false;
+        this.Value = 0;
+        this.slider.value = 0;
+        this.UpdateFillColor(1, 0.9311996f, 0.6933962f);
+        this.meter.Reset();
+        this.gameObject.SetActive(true);
+	}
+
     public void StopIndicator()
     {
         this.Stopped = true;
+        this.UpdateFillColor(1, 0.6191381f, 0.3726415f);
+    }
+
+    void UpdateFillColor(float r, float g, float b)
+    {
         var img = this.slider.transform.Find("Fill Area/Fill").GetComponent<Image>();
-        img.color = new Color { r = 1, g = 0.6191381f, b = 0.3726415f, a = 1 };
+        img.color = new Color { r = r, g = g, b = b, a = 1 };
     }
 
     public void Disable()

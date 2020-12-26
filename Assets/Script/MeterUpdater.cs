@@ -17,17 +17,22 @@ public class MeterUpdater
 		this.edge = edge_interval;
         this.val = start;
         this.incr = incr;
-        this.incr_value = incr_value;
+        this.incr_value = incr_value <= 0 ? 1 : incr_value;
+	}
+
+    public void Reset()
+    {
+        this.val = this.start;
 	}
 
 	public int Update()
 	{
-        if (this.val == this.end + this.edge)
+        if (this.val >= this.end + this.edge)
         {
             this.val = this.end;
             this.incr = false;
         }
-        if (this.val == this.start - this.edge)
+        if (this.val <= this.start - this.edge)
         {
             this.val = this.start;
             this.incr = true;
